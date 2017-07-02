@@ -13,7 +13,7 @@
 
 
     <Button
-        android:text="losuj"
+        android:text="losuj!"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -31,6 +31,27 @@
         android:layout_alignParentEnd="true"
         android:textColor="#ffffff"
         android:textSize="9pt"
-        android:background="#000021"/>
+        android:background="#000025"/>
+
+    <Button
+        android:text="Edytuj bazę"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/edytuj"
+        android:onClick="edytuj"/>
+
+    <Button
+        android:text="Zestaw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/wybierzZestawBttn"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/edytuj"
+        android:layout_marginStart="30dp"
+        android:onClick="wybierzZestaw"/>
+
+
 
 </RelativeLayout>
