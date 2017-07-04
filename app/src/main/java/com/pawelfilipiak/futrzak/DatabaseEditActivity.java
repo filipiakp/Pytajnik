@@ -15,10 +15,9 @@ import java.io.PrintWriter;
 
 public class DatabaseEditActivity extends AppCompatActivity {
 
-    File baza;
-    String text= "", line = "";
-    BufferedReader br;
     EditText editText;
+    String text;
+    DataBaseUtil dataBaseUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,35 +25,14 @@ public class DatabaseEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_database_edit);
         editText =(EditText) findViewById(R.id.editText);
 
-
-        baza = new File(this.getFilesDir().getAbsolutePath() + "/db.txt");
-        System.out.println("Plik z bazą: "+this.getFilesDir().getAbsolutePath() + "/db.txt");
-        try {
-            br = new BufferedReader(new FileReader(baza));//nie działa
-            while ((line = br.readLine()) != null) {
-                text.concat(line);
-                text.concat("\n");
-            }
-            br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        dataBaseUtil = new DataBaseUtil(this.getFilesDir());
+        text = dataBaseUtil.read();
         editText.setText(text);
     }
     public void ok(View view){
-        try {
-            PrintWriter pw = new PrintWriter(baza);
-            pw.print(editText.getText());
-            pw.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        dataBaseUtil.save(editText.getText().toString());
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
-
-
     }
 }

@@ -15,6 +15,7 @@
     <Button
         android:text="losuj!"
         android:layout_width="wrap_content"
+        android:layout_weight=".50"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
@@ -36,22 +37,23 @@
     <Button
         android:text="Edytuj bazę"
         android:layout_width="wrap_content"
+        android:layout_weight=".50"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:id="@+id/edytuj"
         android:onClick="edytuj"/>
 
-    <Button
-        android:text="Zestaw"
+    <Spinner
+        android:spinnerMode="dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/wybierzZestawBttn"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/edytuj"
-        android:layout_marginStart="30dp"
-        android:onClick="wybierzZestaw"/>
-
+        android:id="@+id/spinner"
+        android:background="#ffffff"
+        android:layout_above="@+id/losuj"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp" />
 
 
 </RelativeLayout>
