@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Futrzak</string>
+    <string name="app_name">Furry Ball</string>
+    <string name="placeholder">Shake and ask a question!</string>
+    <string name="random">Random</string>
+    <string name="answers_edit">Answers</string>
+    <string name="save">Save</string>
+    <string name="default_answers">Yes!,No!,Maybe..,I don\'t know</string>
+    <string name="blank_database_dialog">Saving default answers...</string>
 </resources>

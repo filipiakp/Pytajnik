@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Futrzak</string>
+    <string name="placeholder">Wstrząśnij i zadaj pytanie!</string>
+    <string name="random">Losuj</string>
+    <string name="answers_edit">Odpowiedzi</string>
+    <string name="save">Zapisz</string>
+    <string name="default_answers">Tak!,Nie!,Być może..,Nie wiem</string>
+    <string name="blank_database_dialog">Zapisywanie domyślnych odpowiedzi...</string>
+</resources>

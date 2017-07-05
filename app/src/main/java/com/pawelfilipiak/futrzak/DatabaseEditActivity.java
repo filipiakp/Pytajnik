@@ -5,13 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 public class DatabaseEditActivity extends AppCompatActivity {
 
@@ -25,12 +20,18 @@ public class DatabaseEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_database_edit);
         editText =(EditText) findViewById(R.id.editText);
 
-        dataBaseUtil = new DataBaseUtil(this.getFilesDir());
+        dataBaseUtil = new DataBaseUtil(this);
         text = dataBaseUtil.read();
         editText.setText(text);
     }
-    public void ok(View view){
-        dataBaseUtil.save(editText.getText().toString());
+    public void save(View view){
+        text = editText.getText().toString();
+        if(text.isEmpty() || text.trim().isEmpty()){
+            Toast.makeText(this,getResources().getString(R.string.blank_database_dialog),Toast.LENGTH_LONG);
+            text = getResources().getString(R.string.default_answers);
+        }
+
+        dataBaseUtil.save(text);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

@@ -26,24 +26,13 @@
         android:textSize="9pt"/>
 
     <Button
-        android:text="OK"
+        android:text="@string/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/button"
-        android:onClick="ok"
+        android:id="@+id/saveButton"
+        android:onClick="save"
         android:layout_alignParentEnd="true" />
-
-
-    <TextView
-        android:text="Pierwsza linijka to aktualnie używany zbiór odpowiedzi. "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView2"
-        android:layout_alignParentEnd="true"
-        android:textColor="#ffffff"/>
 
 </RelativeLayout>
