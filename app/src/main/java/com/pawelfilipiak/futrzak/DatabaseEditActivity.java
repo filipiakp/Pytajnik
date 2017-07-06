@@ -27,7 +27,7 @@ public class DatabaseEditActivity extends AppCompatActivity {
     public void save(View view){
         text = editText.getText().toString();
         if(text.isEmpty() || text.trim().isEmpty()){
-            Toast.makeText(this,getResources().getString(R.string.blank_database_dialog),Toast.LENGTH_LONG);
+            Toast.makeText(this,getResources().getString(R.string.blank_database_dialog),Toast.LENGTH_LONG).show();
             text = getResources().getString(R.string.default_answers);
         }
 
