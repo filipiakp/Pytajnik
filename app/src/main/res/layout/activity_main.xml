@@ -21,7 +21,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/randomButton"
-        android:onClick="randomQuestion"/>
+        android:onClick="randomQuestion"
+        />
 
     <TextView
         android:text="@string/placeholder"

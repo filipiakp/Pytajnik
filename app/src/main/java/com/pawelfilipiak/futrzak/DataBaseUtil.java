@@ -1,61 +1,97 @@
 package com.pawelfilipiak.futrzak;
 
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 
-public class DataBaseUtil{
+public class DataBaseUtil extends SQLiteOpenHelper{
 
-    private final String DATABASEFILE = "db.txt";
-    private BufferedReader bufferedReader;
-    private FileOutputStream fileOutputStream;
-    private String line, text = "";
-    private File dbFile;
-    private AppCompatActivity context;
+    private static final int DATABASEVERSION = 2;
 
-    public DataBaseUtil(AppCompatActivity context){
-        dbFile = new File(context.getFilesDir(), DATABASEFILE);
-        this.context = context;
+
+    public DataBaseUtil(Context context) {
+        super(context, "furryball.db", null, DATABASEVERSION);
     }
 
-    public void save(String s){
-        try {
-            fileOutputStream = new FileOutputStream(dbFile);
-            fileOutputStream.write(s.getBytes());
-            fileOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE categories (id INTEGER PRIMARY_KEY, name TEXT, answers TEXT)");
+    }
+
+    public String[] getCategories(){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT name FROM categories",null);
+        String[] content = new String[cursor.getCount()];
+
+        int i = 0;
+        if(cursor.moveToFirst()) {
+            do {
+                content[i] = cursor.getString(cursor.getColumnIndex("name"));
+                i++;
+            } while (cursor.moveToNext());
         }
+        return content;
     }
 
-    public String read() {
-        try {
-            bufferedReader = new BufferedReader(new FileReader(dbFile));
+    public void addCategory(String name, String answers){
+        SQLiteDatabase dbw = getWritableDatabase();
 
-            while ((line = bufferedReader.readLine()) != null)
-                text = text + line + "\n";
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("answers", answers);
+        dbw.insert("categories", null, values);
+        dbw.close();
 
-            bufferedReader.close();
-        } catch (FileNotFoundException e) {
-            try {
-                dbFile.createNewFile();
-                fileOutputStream = new FileOutputStream(dbFile);
-                fileOutputStream.write(context.getResources().getString(R.string.default_answers).getBytes());
-                fileOutputStream.close();
-                return context.getResources().getString(R.string.default_answers);
+//        getWritableDatabase().execSQL("INSERT INTO categories " +
+//                                        "VALUES ('"+name+"','"+answers+"');");
 
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return text;
     }
+
+    public void removeCategory(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("categories", "name = ?", new String[] { name });
+        db.close();
+    }
+
+    public void updateCategory(String name, String answers){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("answers", answers);
+
+        db.update("categories", values, "name = ?",
+                new String[] { name });
+    }
+
+    public boolean isCategoryExisting(String name){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("categories",new String[]{"name"},"name=?", new String[]{name},null,null,null,null);
+        if(cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+
+    public String getCategoryAnswers(String name){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("categories", new String[] { "id", "name", "answers" }, "name=?", new String[] { name }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        String answers = cursor.getString(2);
+        System.err.println(answers);
+        return answers;
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS categories");
+        onCreate(db);
+    }
+
+
 }

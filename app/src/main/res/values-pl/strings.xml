@@ -5,6 +5,13 @@
     <string name="random">Losuj</string>
     <string name="answers_edit">Odpowiedzi</string>
     <string name="save">Zapisz</string>
-    <string name="default_answers">Tak!,Nie!,Być może..,Nie wiem</string>
+    <string name="default_answers_name">Podstawowe</string>
+    <string name="default_answers">Tak!#Nie!#Być może..#Nie wiem</string>
     <string name="blank_database_dialog">Zapisywanie domyślnych odpowiedzi...</string>
+    <string name="addItem">Dodaj</string>
+    <string name="deleteItem">Usuń</string>
+    <string name="editItem">Edytuj</string>
+    <string name="cancel">Anuluj</string>
+    <string name="add_category">Nowa Kategoria</string>
+    <string name="add_answer">Nowa Odpowiedź</string>
 </resources>

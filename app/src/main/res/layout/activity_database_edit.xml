@@ -11,20 +11,6 @@
     tools:context="com.pawelfilipiak.futrzak.DatabaseEditActivity"
     android:background="#000000">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="150pt"
-        android:inputType="textMultiLine"
-        android:text=""
-        android:ems="10"
-        android:id="@+id/editText"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:background="#000025"
-        android:textColor="#ffffff"
-        android:textSize="9pt"/>
-
     <Button
         android:text="@string/save"
         android:layout_width="wrap_content"
@@ -34,5 +20,40 @@
         android:id="@+id/saveButton"
         android:onClick="save"
         android:layout_alignParentEnd="true" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:id="@+id/categoryListView"
+        android:layout_above="@+id/addItemButton"/>
+
+    <Button
+        android:id="@+id/addItemButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/addItem"
+        android:layout_above="@+id/saveButton"
+        android:layout_alignParentEnd="true"
+        android:onClick="addItem"/>
+
+    <Button
+        android:id="@+id/deleteItemButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/saveButton"
+        android:layout_alignParentStart="true"
+        android:text="@string/deleteItem"
+        android:onClick="deleteItem"/>
+
+    <Button
+        android:id="@+id/editItemButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/categoryListView"
+        android:layout_centerHorizontal="true"
+        android:text="@string/editItem"
+        android:onClick="editItem"/>
 
 </RelativeLayout>
