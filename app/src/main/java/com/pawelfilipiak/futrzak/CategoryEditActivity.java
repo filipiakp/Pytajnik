@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.Arrays;
 
@@ -27,9 +26,19 @@ public class CategoryEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_edit);
-
-        editButton =(Button) findViewById(R.id.editItemButton);
+        editButton = (Button) findViewById(R.id.editItemButton);
         editButton.setVisibility(View.INVISIBLE);
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                categoryName = null;
+            } else {
+                categoryName = extras.getString("categoryName");
+            }
+        } else {
+            categoryName = (String) savedInstanceState.getSerializable("categoryName");
+        }
+        System.err.println("############################# BIERZACA KATEGORIA " + categoryName);
         loadAnswers();
     }
 
@@ -46,14 +55,17 @@ public class CategoryEditActivity extends AppCompatActivity {
         // Set up the input
         final EditText input = new EditText(this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
         builder.setView(input);
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                typedString = input.getText().toString();
+                if(input != null && input.getText().toString().trim() != null) {
+                    typedString = input.getText().toString();
+                    dataBaseUtil.updateCategory(categoryName, getAnswers() + typedString);
+                }
             }
         });
         builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -64,38 +76,11 @@ public class CategoryEditActivity extends AppCompatActivity {
         });
 
         builder.show();
-        dataBaseUtil.updateCategory(categoryName,getAnswers() + typedString);
         loadAnswers();
     }
 
     public void editItem(View view){
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(getResources().getString(R.string.add_category));
-//
-//        // Set up the input
-//        final EditText input = new EditText(this);
-//        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-//        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-//        builder.setView(input);
-//
-//        // Set up the buttons
-//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                typedString = input.getText().toString();
-//            }
-//        });
-//        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
-//            }
-//        });
-//
-//        builder.show();
-//
-//        dataBaseUtil.updateCategory(categoryName,getAnswers());
-//        loadAnswers();
+
     }
 
     public void deleteItem(View view){
@@ -110,7 +95,7 @@ public class CategoryEditActivity extends AppCompatActivity {
     }
     private String getAnswers(){
         String answers = "";
-        for(int i = 0; i<answersListView.getCount();i++){
+        for(int i = 0; i<answersListView.getCount()-1;i++){
             answers += answersListView.getItemAtPosition(i).toString() + MainActivity.REGEX;
         }
         return answers;

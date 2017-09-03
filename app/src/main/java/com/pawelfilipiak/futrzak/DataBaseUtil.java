@@ -22,18 +22,18 @@ public class DataBaseUtil extends SQLiteOpenHelper{
         db.execSQL("CREATE TABLE categories (id INTEGER PRIMARY_KEY, name TEXT, answers TEXT)");
     }
 
-    public String[] getCategories(){
+    public String[] getCategories() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT name FROM categories",null);
-        String[] content = new String[cursor.getCount()];
+        Cursor cursor = db.rawQuery("SELECT * FROM categories;",null);
+        String[] content = new String[cursor.getCount()-1];
+        cursor.moveToFirst();
 
-        int i = 0;
-        if(cursor.moveToFirst()) {
-            do {
-                content[i] = cursor.getString(cursor.getColumnIndex("name"));
-                i++;
-            } while (cursor.moveToNext());
+        for(int i = 0; i< content.length; i++){
+            content[i] = cursor.getString(cursor.getColumnIndex("name"));
+            if(i!=content.length-1)
+                cursor.moveToNext();
         }
+
         return content;
     }
 
@@ -80,10 +80,12 @@ public class DataBaseUtil extends SQLiteOpenHelper{
     public String getCategoryAnswers(String name){
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query("categories", new String[] { "id", "name", "answers" }, "name=?", new String[] { name }, null, null, null, null);
+
+        String answers = "";
         if (cursor != null)
             cursor.moveToFirst();
-        String answers = cursor.getString(2);
-        System.err.println(answers);
+        if(cursor.getCount()>0)
+            answers = cursor.getString(2);
         return answers;
     }
 

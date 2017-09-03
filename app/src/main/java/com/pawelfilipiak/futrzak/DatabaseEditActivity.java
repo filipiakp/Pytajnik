@@ -6,8 +6,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -16,12 +22,12 @@ import android.widget.Toast;
 import java.util.Arrays;
 
 
-public class DatabaseEditActivity extends AppCompatActivity {
+public class DatabaseEditActivity extends AppCompatActivity{
 
     ListView categoryListView;
-    ListAdapter adapter;
     DataBaseUtil dataBaseUtil;
     String typedString;
+    String selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +35,16 @@ public class DatabaseEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_database_edit);
         categoryListView =(ListView) findViewById(R.id.categoryListView);
 
+        categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selected = categoryListView.getItemAtPosition(position).toString();
+
+            }
+        });
+
         dataBaseUtil = new DataBaseUtil(this);
-        adapter = new ArrayAdapter<String>(this, R.layout.row, Arrays.asList(dataBaseUtil.getCategories()));
-        categoryListView.setAdapter(adapter);
+        loadCategories();
     }
     public void save(View view){
         if(categoryListView.getCount() ==0){
@@ -50,14 +63,17 @@ public class DatabaseEditActivity extends AppCompatActivity {
         // Set up the input
         final EditText input = new EditText(this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
         builder.setView(input);
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                typedString = input.getText().toString();
+                if(input != null && input.getText().toString().trim() != null){
+                    typedString = input.getText().toString();
+                    dataBaseUtil.addCategory(typedString," ");
+                }
             }
         });
         builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -68,18 +84,30 @@ public class DatabaseEditActivity extends AppCompatActivity {
         });
 
         builder.show();
-        dataBaseUtil.addCategory(typedString,"");
-        categoryListView.setAdapter(new ArrayAdapter<String>(this, R.layout.row, Arrays.asList(dataBaseUtil.getCategories())));
+        loadCategories();
+
     }
     public void editItem(View view){
-        Intent intent = new Intent(this, CategoryEditActivity.class);
-        intent.putExtra("categoryName",categoryListView.getSelectedItem().toString());
-        intent.putExtra("answers",dataBaseUtil.getCategoryAnswers(categoryListView.getSelectedItem().toString()).split(MainActivity.REGEX));
-        startActivity(intent);
-        finish();
+        if(selected != null){
+            Intent intent = new Intent(this, CategoryEditActivity.class);
+            intent.putExtra("categoryName",selected);
+            startActivity(intent);
+            finish();
+        }
+
     }
     public void deleteItem(View view){
-        categoryListView.removeView((View) categoryListView.getSelectedItem());
-        dataBaseUtil.removeCategory(categoryListView.getSelectedItem().toString());
+
+        if(selected != null) {
+            dataBaseUtil.removeCategory(selected);
+            loadCategories();
+        }
     }
+
+    private void loadCategories() {
+        categoryListView.setAdapter( new ArrayAdapter<String>(this, R.layout.row, Arrays.asList(dataBaseUtil.getCategories())));
+    }
+
+
+
 }

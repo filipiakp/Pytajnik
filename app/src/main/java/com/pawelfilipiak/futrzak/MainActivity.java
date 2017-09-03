@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Random random = new Random();
     private String[] answers;
     private String[] dataBaseContent;
-    private List<String> list;
     private DataBaseUtil dataBaseUtil;
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -53,16 +53,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         randomButton    = (Button)      findViewById(R.id.randomButton);
         spinner         = (Spinner)     findViewById(R.id.spinner);
         dataBaseUtil    = new DataBaseUtil(this);//for operations on questions base file
-        list            = new ArrayList<>();//for spinner options(answers)
-        if(!dataBaseUtil.isCategoryExisting(getResources().getString(R.string.default_answers_name)))
+        if(!dataBaseUtil.isCategoryExisting(getResources().getString(R.string.default_answers_name)))//it could've been created before
             dataBaseUtil.addCategory(getResources().getString(R.string.default_answers_name),getResources().getString(R.string.default_answers));
+        dataBaseUtil.removeCategory("null");
+        dataBaseUtil.removeCategory("Kategoria1");
         dataBaseContent = dataBaseUtil.getCategories();
+        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Arrays.asList(dataBaseContent)));
         spinner.setOnItemSelectedListener(this);
-
-        list.addAll(Arrays.asList(dataBaseContent));
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list);
-        spinner.setAdapter(dataAdapter);
 
         // ShakeDetector initialization
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -78,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
 
         });
-        //new button.onTouchListener
+
     }
 
     @Override
