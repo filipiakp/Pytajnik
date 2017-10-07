@@ -19,17 +19,22 @@ public class DataBaseUtil extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE categories (id INTEGER PRIMARY_KEY, name TEXT, answers TEXT)");
+        db.execSQL("CREATE TABLE categories (name TEXT PRIMARY_KEY, answers TEXT)");
     }
 
     public String[] getCategories() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM categories;",null);
-        String[] content = new String[cursor.getCount()-1];
+        String[] content = new String[cursor.getCount()];
+        String temp = "";
         cursor.moveToFirst();
 
         for(int i = 0; i< content.length; i++){
-            content[i] = cursor.getString(cursor.getColumnIndex("name"));
+            temp =  cursor.getString(cursor.getColumnIndex("name"));
+            if(temp != null)
+                content[i] = temp;
+            else
+                content[i] = "Default";
             if(i!=content.length-1)
                 cursor.moveToNext();
         }
@@ -79,13 +84,17 @@ public class DataBaseUtil extends SQLiteOpenHelper{
 
     public String getCategoryAnswers(String name){
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query("categories", new String[] { "id", "name", "answers" }, "name=?", new String[] { name }, null, null, null, null);
+        if (name == null)
+            return "Err";
+        Cursor cursor = db.query("categories", new String[] { "name", "answers" }, "name=?", new String[] { name }, null, null, null, null);
 
         String answers = "";
         if (cursor != null)
             cursor.moveToFirst();
         if(cursor.getCount()>0)
-            answers = cursor.getString(2);
+            answers = cursor.getString(1);
+        if(answers == null)
+            return "Err";
         return answers;
     }
 

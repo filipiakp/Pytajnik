@@ -53,12 +53,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         randomButton    = (Button)      findViewById(R.id.randomButton);
         spinner         = (Spinner)     findViewById(R.id.spinner);
         dataBaseUtil    = new DataBaseUtil(this);//for operations on questions base file
+
         if(!dataBaseUtil.isCategoryExisting(getResources().getString(R.string.default_answers_name)))//it could've been created before
             dataBaseUtil.addCategory(getResources().getString(R.string.default_answers_name),getResources().getString(R.string.default_answers));
-        dataBaseUtil.removeCategory("null");
-        dataBaseUtil.removeCategory("Kategoria1");
         dataBaseContent = dataBaseUtil.getCategories();
-        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Arrays.asList(dataBaseContent)));
+
+//        if(dataBaseContent[0] == dataBaseContent[1]){//Default exists twice
+//            String[] str = new String[dataBaseContent.length-1];//TODO: first you should find these "Defaults"... they are probably 0 and last
+//            for(int i = 0;i<dataBaseContent.length-1;i++){
+//                str[i] = dataBaseContent[i+1];
+//            }
+//            dataBaseContent = str;
+//        }
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Arrays.asList(dataBaseContent));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
         spinner.setOnItemSelectedListener(this);
 
         // ShakeDetector initialization

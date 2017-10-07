@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,13 +21,23 @@ public class CategoryEditActivity extends AppCompatActivity {
     ListView answersListView;
     DataBaseUtil dataBaseUtil;
     String typedString;
+    String selected;
     Button editButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database_edit);
+        dataBaseUtil = new DataBaseUtil(this);
         editButton = (Button) findViewById(R.id.editItemButton);
+        answersListView = (ListView) findViewById(R.id.categoryListView);
+        answersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selected = answersListView.getItemAtPosition(position).toString();
+
+            }
+        });
         editButton.setVisibility(View.INVISIBLE);
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -50,7 +61,7 @@ public class CategoryEditActivity extends AppCompatActivity {
     }
     public void addItem(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getResources().getString(R.string.add_category));
+        builder.setTitle(getResources().getString(R.string.add_answer));
 
         // Set up the input
         final EditText input = new EditText(this);
@@ -80,7 +91,7 @@ public class CategoryEditActivity extends AppCompatActivity {
     }
 
     public void editItem(View view){
-
+        //do nothing here
     }
 
     public void deleteItem(View view){
@@ -89,14 +100,15 @@ public class CategoryEditActivity extends AppCompatActivity {
     }
 
     private void loadAnswers(){
-        answersListView.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.row,
-                Arrays.asList(dataBaseUtil.getCategoryAnswers(categoryName).split(MainActivity.REGEX))));
+        String answers = dataBaseUtil.getCategoryAnswers(categoryName);
+        if(answers != "" || answers !=null)
+            answersListView.setAdapter(new ArrayAdapter<String>(this, R.layout.row, Arrays.asList(answers.split(MainActivity.REGEX))));
+
     }
     private String getAnswers(){
         String answers = "";
         for(int i = 0; i<answersListView.getCount()-1;i++){
-            answers += answersListView.getItemAtPosition(i).toString() + MainActivity.REGEX;
+            answers.concat(answersListView.getItemAtPosition(i).toString() + MainActivity.REGEX);
         }
         return answers;
     }
