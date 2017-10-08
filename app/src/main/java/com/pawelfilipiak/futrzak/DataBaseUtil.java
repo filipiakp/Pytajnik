@@ -6,8 +6,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-
+/**@descrition:
+ * a simple class for answers storing purposes
+ *
+*/
 public class DataBaseUtil extends SQLiteOpenHelper{
 
     private static final int DATABASEVERSION = 2;
@@ -50,10 +52,6 @@ public class DataBaseUtil extends SQLiteOpenHelper{
         values.put("answers", answers);
         dbw.insert("categories", null, values);
         dbw.close();
-
-//        getWritableDatabase().execSQL("INSERT INTO categories " +
-//                                        "VALUES ('"+name+"','"+answers+"');");
-
     }
 
     public void removeCategory(String name){

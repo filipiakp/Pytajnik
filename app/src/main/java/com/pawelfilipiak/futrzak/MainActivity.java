@@ -22,8 +22,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-/**
- *
+/**Main Activity
+ * @description of app:
+ * Furryball is simple app, that randomly answers your questions
+ * eg. you have to choose between 6 colors of shoes
+ * all of them are great, so it's hard to make decision
+ * it doesn't matter which one you will buy
+ * this app is created for a such situations
+ * you can simply add category "colors" or "shoes"
+ * click "edit"
+ * then add these colors of shoes
+ * save, save
+ * and voil'a! shake your phone and get the right one!
+ * @author Paweł Filipiak
  */
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -58,15 +69,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             dataBaseUtil.addCategory(getResources().getString(R.string.default_answers_name),getResources().getString(R.string.default_answers));
         dataBaseContent = dataBaseUtil.getCategories();
 
-//        if(dataBaseContent[0] == dataBaseContent[1]){//Default exists twice
-//            String[] str = new String[dataBaseContent.length-1];//TODO: first you should find these "Defaults"... they are probably 0 and last
-//            for(int i = 0;i<dataBaseContent.length-1;i++){
-//                str[i] = dataBaseContent[i+1];
-//            }
-//            dataBaseContent = str;
-//        }
-
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Arrays.asList(dataBaseContent));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -81,9 +83,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             @Override
             public void onShake(int count) {
-
                 randomButton.performClick();
-
             }
 
         });
@@ -93,18 +93,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onResume() {
         super.onResume();
-        // Add the following line to register the Session Manager Listener onResume
         mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
     public void onPause() {
-        // Add the following line to unregister the Sensor Manager onPause
         mSensorManager.unregisterListener(mShakeDetector);
         super.onPause();
     }
 
     public void randomQuestion(View view){
+        //TODO: make that anim prettier and more chaotic
         playAnimation();
         answerTV.setText(answers[random.nextInt(answers.length)]);
     }

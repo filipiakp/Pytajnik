@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class CategoryEditActivity extends AppCompatActivity {
 
@@ -23,6 +23,8 @@ public class CategoryEditActivity extends AppCompatActivity {
     String typedString;
     String selected;
     Button editButton;
+    ArrayAdapter<String> adapter;
+    ArrayList list = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,6 @@ public class CategoryEditActivity extends AppCompatActivity {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selected = answersListView.getItemAtPosition(position).toString();
-
             }
         });
         editButton.setVisibility(View.INVISIBLE);
@@ -49,8 +50,11 @@ public class CategoryEditActivity extends AppCompatActivity {
         } else {
             categoryName = (String) savedInstanceState.getSerializable("categoryName");
         }
-        System.err.println("############################# BIERZACA KATEGORIA " + categoryName);
-        loadAnswers();
+
+        for(String s : dataBaseUtil.getCategoryAnswers(categoryName).split(MainActivity.REGEX))
+            list.add(s);
+        adapter = new ArrayAdapter<String>(this, R.layout.row,list);
+        answersListView.setAdapter(adapter);
     }
 
     public void save(View view){
@@ -59,23 +63,24 @@ public class CategoryEditActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
     public void addItem(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.add_answer));
 
-        // Set up the input
         final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
         builder.setView(input);
 
-        // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(input != null && input.getText().toString().trim() != null) {
                     typedString = input.getText().toString();
                     dataBaseUtil.updateCategory(categoryName, getAnswers() + typedString);
+                    list.add(typedString);
+                    adapter.notifyDataSetChanged();
+
                 }
             }
         });
@@ -87,29 +92,26 @@ public class CategoryEditActivity extends AppCompatActivity {
         });
 
         builder.show();
-        loadAnswers();
     }
 
     public void editItem(View view){
-        //do nothing here
+        //do nothing here, its invisible
     }
 
     public void deleteItem(View view){
-        answersListView.removeView((View) answersListView.getSelectedItem());
-        dataBaseUtil.updateCategory(categoryName, getAnswers());
+        if(selected != null) {
+            list.remove(selected);
+            adapter.notifyDataSetChanged();
+            dataBaseUtil.updateCategory(categoryName, getAnswers());
+            selected = null;
+        }
     }
 
-    private void loadAnswers(){
-        String answers = dataBaseUtil.getCategoryAnswers(categoryName);
-        if(answers != "" || answers !=null)
-            answersListView.setAdapter(new ArrayAdapter<String>(this, R.layout.row, Arrays.asList(answers.split(MainActivity.REGEX))));
-
-    }
     private String getAnswers(){
         String answers = "";
-        for(int i = 0; i<answersListView.getCount()-1;i++){
-            answers.concat(answersListView.getItemAtPosition(i).toString() + MainActivity.REGEX);
-        }
+        for(Object o : list)
+            answers = answers + o.toString() + MainActivity.REGEX;
+
         return answers;
     }
 }
