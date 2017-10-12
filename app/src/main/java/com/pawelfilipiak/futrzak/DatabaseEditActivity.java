@@ -48,11 +48,14 @@ public class DatabaseEditActivity extends AppCompatActivity{
     public void save(View view){
         if(categoryListView.getCount() ==0){
             dataBaseUtil.addCategory(getResources().getString(R.string.default_answers_name),getResources().getString(R.string.default_answers));
-            Toast.makeText(this,getResources().getString(R.string.blank_database_dialog),Toast.LENGTH_LONG).show();
+            showToast(getResources().getString(R.string.blank_database_dialog));
         }
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+    private void showToast(String txt){
+        Toast.makeText(this,txt,Toast.LENGTH_LONG).show();
     }
 
     public void addItem(View view){
@@ -69,9 +72,13 @@ public class DatabaseEditActivity extends AppCompatActivity{
             public void onClick(DialogInterface dialog, int which) {
                 if(input != null && input.getText().toString().trim() != null){
                     typedString = input.getText().toString();
-                    dataBaseUtil.addCategory(typedString," ");
-                    list.add(typedString);
-                    adapter.notifyDataSetChanged();
+                    if(dataBaseUtil.isCategoryExisting(typedString)) {
+                        showToast(getResources().getString(R.string.category_exists_dialog));
+                    }else{
+                        dataBaseUtil.addCategory(typedString, "");
+                        list.add(typedString);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             }
         });

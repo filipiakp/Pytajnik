@@ -14,4 +14,5 @@
     <string name="cancel">Anuluj</string>
     <string name="add_category">Nowa Kategoria</string>
     <string name="add_answer">Nowa Odpowiedź</string>
+    <string name="category_exists_dialog">Kategoria już istnieje</string>
 </resources>

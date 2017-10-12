@@ -40,10 +40,14 @@ public class CategoryEditActivity extends AppCompatActivity {
             }
         });
         editButton.setVisibility(View.INVISIBLE);
+
+        //get category name from extras
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
-                categoryName = null;
+                Intent intent = new Intent(this, DatabaseEditActivity.class);
+                startActivity(intent);
+                finish();
             } else {
                 categoryName = extras.getString("categoryName");
             }
@@ -51,8 +55,10 @@ public class CategoryEditActivity extends AppCompatActivity {
             categoryName = (String) savedInstanceState.getSerializable("categoryName");
         }
 
+        //get answers and fill list
         for(String s : dataBaseUtil.getCategoryAnswers(categoryName).split(MainActivity.REGEX))
-            list.add(s);
+            if(s!=" " &&  s!= "" &&  s!= null)
+                list.add(s);
         adapter = new ArrayAdapter<String>(this, R.layout.row,list);
         answersListView.setAdapter(adapter);
     }

@@ -14,4 +14,5 @@
     <string name="cancel">Cancel</string>
     <string name="add_category">Add Category</string>
     <string name="add_answer">Add Answer</string>
+    <string name="category_exists_dialog">It already exists</string>
 </resources>
