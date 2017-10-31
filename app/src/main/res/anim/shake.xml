@@ -5,17 +5,17 @@
 
     <translate
         android:fromXDelta="0%p"
-        android:toXDelta="40%p"
-        android:duration="100" />
+        android:toXDelta="100%p"
+        android:duration="200" />
 
     <translate
-        android:fromXDelta="0%p"
-        android:toXDelta="-80%p"
+        android:fromXDelta="100%p"
+        android:toXDelta="-200%p"
         android:duration="110" />
 
     <translate
-        android:fromXDelta="0%p"
-        android:toXDelta="40%p"
+        android:fromXDelta="-200%p"
+        android:toXDelta="100%p"
         android:duration="100" />
 
     <!--
