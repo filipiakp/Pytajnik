@@ -21,8 +21,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/randomButton"
-        android:onClick="randomQuestion"
-        />
+        android:onClick="onRandomButtonClick" />
 
     <TextView
         android:text="@string/placeholder"
@@ -61,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/futrzak"
-        android:layout_below="@+id/answerTextView"
+        android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="136dp"
         android:id="@+id/imageView" />

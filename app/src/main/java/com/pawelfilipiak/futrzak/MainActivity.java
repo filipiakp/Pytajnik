@@ -1,6 +1,5 @@
 package com.pawelfilipiak.futrzak;
 
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -15,11 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 /**Main Activity
@@ -76,14 +72,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setOnItemSelectedListener(this);
 
         // ShakeDetector initialization
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        //mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        //mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mShakeDetector = new ShakeDetector();
         mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
 
             @Override
-            public void onShake(int count) {
-                randomButton.performClick();
+            public void onShake(float x, float y, float z) {//int count
+                //randomButton.performClick();
+                System.out.println("HEEEEEEEEEEEEEEEEEEEEY");
+
+                imageView.setX(x*10);
+                imageView.setY(y*10);
+                answerTV.setText(answers[random.nextInt(answers.length)]);
             }
 
         });
@@ -93,17 +94,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onResume() {
         super.onResume();
-        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+//        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
     public void onPause() {
-        mSensorManager.unregisterListener(mShakeDetector);
+//        mSensorManager.unregisterListener(mShakeDetector);
         super.onPause();
     }
 
-    public void randomQuestion(View view){
+    public void onRandomButtonClick(View view){
         //TODO: make that anim prettier and more chaotic
+        imageView.setX(0F);
         playAnimation();
         answerTV.setText(answers[random.nextInt(answers.length)]);
     }

@@ -25,6 +25,8 @@ public class CategoryEditActivity extends AppCompatActivity {
     Button editButton;
     ArrayAdapter<String> adapter;
     ArrayList list = new ArrayList<String>();
+    AlertDialog alertDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +50,15 @@ public class CategoryEditActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, DatabaseEditActivity.class);
                 startActivity(intent);
                 finish();
+                System.err.println("########1");
             } else {
                 categoryName = extras.getString("categoryName");
+                System.err.println("########2");
             }
         } else {
             categoryName = (String) savedInstanceState.getSerializable("categoryName");
+            System.err.println("########3");
+
         }
 
         //get answers and fill list
@@ -71,14 +77,14 @@ public class CategoryEditActivity extends AppCompatActivity {
     }
 
     public void addItem(View view){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getResources().getString(R.string.add_answer));
+        AlertDialog.Builder ADbuilder = new AlertDialog.Builder(this);
+        ADbuilder.setTitle(getResources().getString(R.string.add_answer));
 
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        builder.setView(input);
+        ADbuilder.setView(input);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        ADbuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(input != null && input.getText().toString().trim() != null) {
@@ -90,14 +96,15 @@ public class CategoryEditActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+        ADbuilder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
+        alertDialog = ADbuilder.create();
+        alertDialog.show();
 
-        builder.show();
     }
 
     public void editItem(View view){
@@ -119,5 +126,27 @@ public class CategoryEditActivity extends AppCompatActivity {
             answers = answers + o.toString() + MainActivity.REGEX;
 
         return answers;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, DatabaseEditActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if ( alertDialog!=null && alertDialog.isShowing() ){
+
+            alertDialog.cancel();
+        }
+
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle icicle) {
+        super.onSaveInstanceState(icicle);
+        icicle.putString("categoryName", categoryName);
     }
 }

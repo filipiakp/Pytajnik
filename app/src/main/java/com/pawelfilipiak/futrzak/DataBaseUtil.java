@@ -83,7 +83,7 @@ public class DataBaseUtil extends SQLiteOpenHelper{
     public String getCategoryAnswers(String name){
         SQLiteDatabase db = getReadableDatabase();
         if (name == null)
-            return "Err";
+            return "Err: Blank Name";
         Cursor cursor = db.query("categories", new String[] { "name", "answers" }, "name=?", new String[] { name }, null, null, null, null);
 
         String answers = "";
@@ -92,7 +92,7 @@ public class DataBaseUtil extends SQLiteOpenHelper{
         if(cursor.getCount()>0)
             answers = cursor.getString(1);
         if(answers == null)
-            return "Err";
+            return "Err: null";
         return answers;
     }
 

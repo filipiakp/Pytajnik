@@ -45,6 +45,7 @@ public class DatabaseEditActivity extends AppCompatActivity{
         adapter = new ArrayAdapter<String>(this, R.layout.row,list);
         categoryListView.setAdapter(adapter);
     }
+
     public void save(View view){
         if(categoryListView.getCount() ==0){
             dataBaseUtil.addCategory(getResources().getString(R.string.default_answers_name),getResources().getString(R.string.default_answers));
@@ -54,6 +55,7 @@ public class DatabaseEditActivity extends AppCompatActivity{
         startActivity(intent);
         finish();
     }
+
     private void showToast(String txt){
         Toast.makeText(this,txt,Toast.LENGTH_LONG).show();
     }
@@ -110,7 +112,12 @@ public class DatabaseEditActivity extends AppCompatActivity{
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
 
 }
